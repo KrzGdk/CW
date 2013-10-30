@@ -3,6 +3,8 @@
  * and open the template in the editor.
  */
 package cw;
+import dictionary.*;
+import java.io.*;
 
 /**
  *
@@ -13,7 +15,9 @@ public class Crossword{
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args){
-        // TODO code application logic here
+    public static void main(String[] args) throws IOException{
+        CwDB db = new CwDB("C:\\Users\\Krzysztof\\Documents\\NetBeansProjects\\CW\\src\\cwdb.txt");
+        Entry e = db.get("babiarz");
+        System.out.println(e.getClue());
     }
 }

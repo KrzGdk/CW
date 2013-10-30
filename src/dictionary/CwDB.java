@@ -19,6 +19,7 @@ public class CwDB implements Serializable{
     protected LinkedList<Entry> db;
     
     public CwDB(String filename) throws IOException{
+        db = new LinkedList<>();
         createDB(filename);
     }
     public void add(String word, String clue){
@@ -41,7 +42,7 @@ public class CwDB implements Serializable{
     }
     protected void createDB(String filename) throws IOException{
         try{
-            BufferedReader reader = Files.newBufferedReader(Paths.get("cwdb.txt"), StandardCharsets.UTF_8);
+            BufferedReader reader = Files.newBufferedReader(Paths.get(filename), StandardCharsets.UTF_8);
             String word;
             String clue;
             while ((word = reader.readLine()) != null) {
@@ -49,7 +50,8 @@ public class CwDB implements Serializable{
                 this.add(word,clue);
             }   
         }
-        catch(Exception e){
+        catch(IOException e){
+            System.out.println(e);
         }
     }
 }
