@@ -8,7 +8,7 @@ package cw;
  *
  * @author Krzysiek
  */
-public class CW{
+public class Crossword{
 
     /**
      * @param args the command line arguments
