@@ -16,6 +16,7 @@ import java.nio.file.Paths;
  * @author Krzysiek
  */
 public class CwDB implements Serializable{
+    private static final long serialVersionUID = 3429466297L;
     protected LinkedList<Entry> db;
     
     public CwDB(String filename) throws IOException{
@@ -35,14 +36,22 @@ public class CwDB implements Serializable{
         db.remove(get(word));
     }
     public void saveDB(String filename){
-        // TODO
+        try(FileOutputStream fos = new FileOutputStream(filename)) {
+            ObjectOutputStream  oos = new ObjectOutputStream(fos); 
+            oos.writeObject(this);
+        } 
+        catch (FileNotFoundException e) {
+            e.printStackTrace(System.out);
+        } 
+        catch (IOException e) {
+            e.printStackTrace(System.out);
+        }
     }
     public int getSize(){
         return db.size();
     }
-    protected void createDB(String filename) throws IOException{
-        try{
-            BufferedReader reader = Files.newBufferedReader(Paths.get(filename), StandardCharsets.UTF_8);
+    private void createDB(String filename) throws IOException{
+        try(BufferedReader reader = Files.newBufferedReader(Paths.get(filename), StandardCharsets.UTF_8)){
             String word;
             String clue;
             while ((word = reader.readLine()) != null) {
