@@ -8,7 +8,7 @@ package dictionary;
  *
  * @author Krzysiek
  */
-public class Entry{
+public class Entry implements Comparable<Entry>{
     private String word;
     private String clue;
     
@@ -21,5 +21,10 @@ public class Entry{
     }
     public String getClue(){
         return this.clue;
+    }
+    
+    @Override
+    public int compareTo(Entry other){
+        return this.word.compareTo(other.getWord());
     }
 }
