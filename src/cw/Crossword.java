@@ -54,7 +54,7 @@ public class Crossword{
      */
     public static void main(String[] args) throws IOException{
         CwDB db = new CwDB("C:\\Users\\Krzysztof\\Documents\\NetBeansProjects\\CW\\src\\cwdb.txt");
-        Entry e = db.get("babiarz");
+        Entry e = db.get("BAJT");
         System.out.println(e.getClue());
     }
 }

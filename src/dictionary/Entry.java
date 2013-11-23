@@ -13,7 +13,7 @@ public class Entry implements Comparable<Entry>{
     private String clue;
     
     public Entry(String word, String clue){
-        this.word = word;
+        this.word = word.toUpperCase();
         this.clue = clue;
     }
     public String getWord(){

@@ -44,7 +44,7 @@ public class InteliCwDB extends CwDB{
     public void add(String word, String clue){
         int i;
         for(i = 0;i<db.size();i++){
-            if(word.compareTo(db.get(i).getWord()) < 0) break;
+            if(word.toUpperCase().compareTo(db.get(i).getWord()) < 0) break;
         }
         db.add(i, new Entry(word,clue));
     }

@@ -28,7 +28,7 @@ public class CwDB implements Serializable{
     }
     public Entry get(String word){
         for(Entry e : db){
-            if(word.equals(e.getWord())) return e;
+            if(word.toUpperCase().equals(e.getWord())) return e;
         }
         return null;
     }
