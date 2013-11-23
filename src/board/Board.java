@@ -23,6 +23,16 @@ public class Board{
         b.setCell(2, 2, new BoardCell("a"));
         System.out.println(b.getCell(2, 3)); 
     }
+    
+    public Board copyBoard(){
+        Board copy = new Board(this.width, this.height);
+        for(int i = 0; i<width; i++){
+            for(int j = 0; i<height; i++){
+                copy.setCell(i, j, this.board[i][j]);
+            }
+        }
+        return copy;
+    }
 
     /**
      * @return the width
