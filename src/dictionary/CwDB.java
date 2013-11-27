@@ -19,7 +19,7 @@ public class CwDB implements Serializable{
     private static final long serialVersionUID = 3429466297L;
     protected LinkedList<Entry> db;
     
-    public CwDB(String filename) throws IOException{
+    public CwDB(String filename){
         db = new LinkedList<>();
         createDB(filename);
     }
@@ -50,7 +50,7 @@ public class CwDB implements Serializable{
     public int getSize(){
         return db.size();
     }
-    private void createDB(String filename) throws IOException{
+    private void createDB(String filename){
         try(BufferedReader reader = Files.newBufferedReader(Paths.get(filename), StandardCharsets.UTF_8)){
             String word;
             String clue;

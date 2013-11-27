@@ -4,7 +4,6 @@
  */
 package dictionary;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -13,7 +12,7 @@ import java.util.Random;
  * @author Krzysiek
  */
 public class InteliCwDB extends CwDB{
-    public InteliCwDB(String filename) throws IOException{
+    public InteliCwDB(String filename){
         super(filename);
     }
     public LinkedList<Entry> findAll(String pattern){
@@ -31,13 +30,13 @@ public class InteliCwDB extends CwDB{
     }
     public Entry getRandom(int length){
         Random gen = new Random();
-        LinkedList<Entry> matching = findAll("/^[a-zA-Z0-9]{" + length + "}$/");
-        return matching.get(gen.nextInt(db.size()));
+        LinkedList<Entry> matching = findAll(".{" + length + "}");
+        return matching.get(gen.nextInt(matching.size()));
     }
     public Entry getRandom(String pattern){
         Random gen = new Random();
         LinkedList<Entry> matching = findAll(pattern);
-        return matching.get(gen.nextInt(db.size()));
+        return matching.get(gen.nextInt(matching.size()));
     }
     
     @Override

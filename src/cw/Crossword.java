@@ -20,8 +20,25 @@ public class Crossword{
     private InteliCwDB cwdb;
     private final long ID = -1;
     
+    public Crossword(int width, int height, String db){
+        entries = new LinkedList<>();
+        b = new Board(width, height);
+        cwdb = new InteliCwDB(db);
+    }
+    
     public Iterator<CwEntry> getROEntryIter(){
         return Collections.unmodifiableList(this.entries).iterator();
+    }
+    public boolean isEmpty(){
+        if(entries.size() == 0) return true;
+        else return false;
+    }
+    public boolean isFull(){
+        if(entries.size() == entries.element().getWord().length()+1) return true;
+        else return false;
+    }
+    public int numOfEntries(){
+        return entries.size();
     }
     public Board getBoardCopy(){
         return b.copyBoard();
@@ -45,6 +62,7 @@ public class Crossword{
     public final void generate(Strategy s){
         CwEntry e = null;
         while((e = s.findEntry(this)) != null){
+            System.out.println(e.getWord()); 
             addCwEntry(e,s);
         }
     }
@@ -53,8 +71,14 @@ public class Crossword{
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException{
-        CwDB db = new CwDB("C:\\Users\\Krzysztof\\Documents\\NetBeansProjects\\CW\\src\\cwdb.txt");
-        Entry e = db.get("BAJT");
-        System.out.println(e.getClue());
+//        CwDB db = new CwDB("C:\\Users\\Krzysztof\\Documents\\NetBeansProjects\\CW\\src\\cwdb.txt");
+//        Entry e = db.get("BAJT");
+//        System.out.println(e.getClue());
+        
+        Strategy s = new CwStrategy();
+        
+        Crossword cw = new Crossword(10,10,"C:\\Users\\Krzysztof\\Documents\\NetBeansProjects\\CW\\src\\cwdb.txt");
+        cw.generate(s);
+        cw.getBoardCopy().printBoard();
     }
 }

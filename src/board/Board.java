@@ -18,6 +18,14 @@ public class Board{
         this.height = height;
         board = new BoardCell[width][height];
     }
+    public void printBoard(){
+        for(int i = 0; i<width; i++){
+            for(int j = 0; i<height; i++){
+                if(board[i][j] == null) System.out.println(" ");
+                else System.out.println(board[i][j].getContent());
+            }
+        }
+    }
     public static void main(String[] args){
         Board b = new Board(5,5);
         b.setCell(2, 2, new BoardCell("a"));
@@ -87,6 +95,25 @@ public class Board{
                 }
             }
         }
+        return pattern;
+    }
+    /**
+     *
+     * @param fromx
+     * @param fromy
+     * @param tox
+     * @param toy
+     * @return
+     */
+    public String createHorizMixedLengthPattern(int row){
+        String pattern = ".{," + width/2 + "}";
+        for(int i=0;i<width;i++){
+            if(board[row][i] != null){
+                pattern += board[row][i].getContent();
+            }
+        }
+        if(width%2 == 1) pattern += ".{," + width/2 + "}";
+        else pattern += ".{," + ((width/2)-1) + "}";
         return pattern;
     }
 }

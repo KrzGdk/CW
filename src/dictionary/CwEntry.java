@@ -9,7 +9,6 @@ package dictionary;
  * @author Krzysiek
  */
 public class CwEntry extends Entry{
-    public enum Direction {HORIZ, VERT};
     
     private int x;
     private int y;
