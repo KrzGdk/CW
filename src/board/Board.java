@@ -20,10 +20,11 @@ public class Board{
     }
     public void printBoard(){
         for(int i = 0; i<width; i++){
-            for(int j = 0; i<height; i++){
-                if(board[i][j] == null) System.out.println(" ");
-                else System.out.println(board[i][j].getContent());
+            for(int j = 0; j<height; j++){
+                if(board[i][j] == null) System.out.print(".");
+                else System.out.print(board[i][j].getContent());
             }
+            System.out.print("\n");
         }
     }
     public static void main(String[] args){
@@ -35,7 +36,7 @@ public class Board{
     public Board copyBoard(){
         Board copy = new Board(this.width, this.height);
         for(int i = 0; i<width; i++){
-            for(int j = 0; i<height; i++){
+            for(int j = 0; j<height; j++){
                 copy.setCell(i, j, this.board[i][j]);
             }
         }
@@ -106,14 +107,14 @@ public class Board{
      * @return
      */
     public String createHorizMixedLengthPattern(int row){
-        String pattern = ".{," + width/2 + "}";
+        String pattern = ".{0," + width/2 + "}";
         for(int i=0;i<width;i++){
             if(board[row][i] != null){
                 pattern += board[row][i].getContent();
             }
         }
-        if(width%2 == 1) pattern += ".{," + width/2 + "}";
-        else pattern += ".{," + ((width/2)-1) + "}";
+        if(width%2 == 1) pattern += ".{0," + width/2 + "}";
+        else pattern += ".{0," + ((width/2)-1) + "}";
         return pattern;
     }
 }

@@ -62,7 +62,6 @@ public class Crossword{
     public final void generate(Strategy s){
         CwEntry e = null;
         while((e = s.findEntry(this)) != null){
-            System.out.println(e.getWord()); 
             addCwEntry(e,s);
         }
     }
@@ -77,7 +76,7 @@ public class Crossword{
         
         Strategy s = new CwStrategy();
         
-        Crossword cw = new Crossword(10,10,"C:\\Users\\Krzysztof\\Documents\\NetBeansProjects\\CW\\src\\cwdb.txt");
+        Crossword cw = new Crossword(10,5,"C:\\Users\\Krzysztof\\Documents\\NetBeansProjects\\CW\\src\\cwdb.txt");
         cw.generate(s);
         cw.getBoardCopy().printBoard();
     }
