@@ -13,14 +13,14 @@ import java.util.LinkedList;
 public class Board{
     private BoardCell[][] board;
     private int width, height;
-    public Board(int width, int height){
+    public Board(int height, int width){
         this.width = width;
         this.height = height;
-        board = new BoardCell[width][height];
+        board = new BoardCell[height][width];
     }
     public void printBoard(){
-        for(int i = 0; i<width; i++){
-            for(int j = 0; j<height; j++){
+        for(int i = 0; i<height; i++){
+            for(int j = 0; j<width; j++){
                 if(board[i][j] == null) System.out.print(".");
                 else System.out.print(board[i][j].getContent());
             }
@@ -34,10 +34,11 @@ public class Board{
     }
     
     public Board copyBoard(){
-        Board copy = new Board(this.width, this.height);
-        for(int i = 0; i<width; i++){
-            for(int j = 0; j<height; j++){
+        Board copy = new Board(this.height, this.width);
+        for(int i = 0; i<height; i++){
+            for(int j = 0; j<width; j++){
                 copy.setCell(i, j, this.board[i][j]);
+//                System.out.println(this.board[j][i]);
             }
         }
         return copy;
@@ -57,11 +58,11 @@ public class Board{
         return height;
     }
     
-    public BoardCell getCell(int x, int y){
-        return board[x][y];
+    public BoardCell getCell(int vert, int horiz){
+        return board[vert][horiz];
     }
-    public void setCell(int x, int y, BoardCell cell){
-        board[x][y] = cell;
+    public void setCell(int vert, int horiz, BoardCell cell){
+        board[vert][horiz] = cell;
     }
     
     public LinkedList<BoardCell> getStartCells(){

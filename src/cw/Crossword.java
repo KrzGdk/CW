@@ -16,13 +16,13 @@ import java.util.LinkedList;
  */
 public class Crossword{
     private LinkedList<CwEntry> entries;
-    private Board b;
+    public Board b;  // !!
     private InteliCwDB cwdb;
     private final long ID = -1;
     
-    public Crossword(int width, int height, String db){
+    public Crossword(int height, int width, String db){
         entries = new LinkedList<>();
-        b = new Board(width, height);
+        b = new Board(height, width);
         cwdb = new InteliCwDB(db);
     }
     
@@ -69,14 +69,10 @@ public class Crossword{
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException{
-//        CwDB db = new CwDB("C:\\Users\\Krzysztof\\Documents\\NetBeansProjects\\CW\\src\\cwdb.txt");
-//        Entry e = db.get("BAJT");
-//        System.out.println(e.getClue());
-        
+    public static void main(String[] args) throws IOException{        
         Strategy s = new CwStrategy();
         
-        Crossword cw = new Crossword(10,5,"C:\\Users\\Krzysztof\\Documents\\NetBeansProjects\\CW\\src\\cwdb.txt");
+        Crossword cw = new Crossword(4,15,"C:\\Users\\Krzysztof\\Documents\\NetBeansProjects\\CW\\src\\cwdb.txt");
         cw.generate(s);
         cw.getBoardCopy().printBoard();
     }
