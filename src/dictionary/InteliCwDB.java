@@ -4,6 +4,7 @@
  */
 package dictionary;
 
+import cw.CantFindWordException;
 import java.util.LinkedList;
 import java.util.Random;
 

@@ -14,9 +14,9 @@ import java.util.LinkedList;
  *
  * @author Krzysiek
  */
-public class Crossword{
+public class Crossword {
     private LinkedList<CwEntry> entries;
-    public Board b;  // !!
+    private Board b;  // !!
     private InteliCwDB cwdb;
     private final long ID = -1;
     
@@ -46,6 +46,9 @@ public class Crossword{
     public InteliCwDB getCwDB(){
         return cwdb;
     }
+    public LinkedList<CwEntry> getEntries(){
+        return entries;
+    }
     public void setCwDB(InteliCwDB cwdb){
         this.cwdb = cwdb;
     }
@@ -72,7 +75,7 @@ public class Crossword{
     public static void main(String[] args) throws IOException{        
         Strategy s = new CwStrategy();
         
-        Crossword cw = new Crossword(4,15,"C:\\Users\\Krzysztof\\Documents\\NetBeansProjects\\CW\\src\\cwdb.txt");
+        Crossword cw = new Crossword(10,15,"C:\\Users\\Krzysztof\\Documents\\NetBeansProjects\\CW\\src\\cwdb.txt");
         cw.generate(s);
         cw.getBoardCopy().printBoard();
     }
