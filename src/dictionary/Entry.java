@@ -4,11 +4,13 @@
  */
 package dictionary;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Krzysiek
  */
-public class Entry implements Comparable<Entry>{
+public class Entry implements Comparable<Entry>, Serializable{
     private String word;
     private String clue;
     

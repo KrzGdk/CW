@@ -4,13 +4,14 @@
  */
 package board;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 /**
  *
  * @author Krzysiek
  */
-public class Board{
+public class Board implements Serializable{
     private BoardCell[][] board;
     private int width, height;
     public Board(int height, int width){

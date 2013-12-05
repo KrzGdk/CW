@@ -1,4 +1,6 @@
-package cw;
+package browser;
+
+import cw.Crossword;
 
 /**
  *

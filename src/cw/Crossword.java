@@ -5,20 +5,23 @@
 package cw;
 import board.Board;
 import dictionary.*;
+import browser.*;
 import java.io.*;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Krzysiek
  */
-public class Crossword {
+public class Crossword implements Serializable{
     private LinkedList<CwEntry> entries;
     private Board b;  // !!
     private InteliCwDB cwdb;
-    private final long ID = -1;
+    private long id;
     
     public Crossword(int height, int width, String db){
         entries = new LinkedList<>();
@@ -68,6 +71,19 @@ public class Crossword {
             addCwEntry(e,s);
         }
     }
+        /**
+     * @return the id
+     */
+    public long getId(){
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(long id){
+        this.id = id;
+    }
 
     /**
      * @param args the command line arguments
@@ -75,8 +91,18 @@ public class Crossword {
     public static void main(String[] args) throws IOException{        
         Strategy s = new CwStrategy();
         
-        Crossword cw = new Crossword(10,15,"C:\\Users\\Krzysztof\\Documents\\NetBeansProjects\\CW\\src\\cwdb.txt");
-        cw.generate(s);
-        cw.getBoardCopy().printBoard();
+//        Crossword cw = new Crossword(10,15,"C:\\Users\\Krzysztof\\Documents\\NetBeansProjects\\CW\\src\\cwdb.txt");
+//        cw.generate(s);
+//        cw.getBoardCopy().printBoard();
+        CwBrowser b = new CwBrowser(".");
+        try {
+            for(Crossword c : b.loadAll()){
+                c.getBoardCopy().printBoard();
+                System.out.println("\n");
+            }
+        } catch (FileNotFoundException | ClassNotFoundException ex) {
+            Logger.getLogger(Crossword.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+
 }

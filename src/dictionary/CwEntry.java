@@ -4,11 +4,13 @@
  */
 package dictionary;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Krzysiek
  */
-public class CwEntry extends Entry{
+public class CwEntry extends Entry implements Serializable{
     
     private int x;
     private int y;

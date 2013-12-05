@@ -4,13 +4,14 @@
  */
 package board;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
  *
  * @author Krzysiek
  */
-public class BoardCell{
+public class BoardCell implements Serializable{
     public Boolean[][] can = new Boolean[2][3]; // HORIZ/VERT x Start/End/Inner
     private String content;
     public BoardCell(){
