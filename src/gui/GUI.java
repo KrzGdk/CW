@@ -62,14 +62,14 @@ public class GUI extends javax.swing.JFrame{
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Generator krzyżówek");
         setMinimumSize(new java.awt.Dimension(300, 400));
-        setPreferredSize(new java.awt.Dimension(1100, 535));
+        setPreferredSize(new java.awt.Dimension(1100, 510));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Wymiary"));
         jPanel1.setName(""); // NOI18N
 
         jLabel1.setText("Wysokość");
 
-        heightSpinner.setModel(new javax.swing.SpinnerNumberModel(4, 4, 13, 1));
+        heightSpinner.setModel(new javax.swing.SpinnerNumberModel(4, 4, 12, 1));
         heightSpinner.setName("height"); // NOI18N
 
         jLabel2.setText("Szerokość");
