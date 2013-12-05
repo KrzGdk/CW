@@ -59,7 +59,7 @@ public class CwReader{
     }
     
     public Crossword getCw(long id) throws FileNotFoundException, IOException, ClassNotFoundException{
-        File f = new File(dir + "/" + id + ".cw");
+        File f = new File(dir + File.separator + id + ".cw");
         ObjectInputStream in = new ObjectInputStream(new FileInputStream(f));
         Crossword cw = (Crossword) in.readObject();
         return cw;

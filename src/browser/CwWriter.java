@@ -5,6 +5,7 @@
 package browser;
 
 import cw.Crossword;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -41,7 +42,7 @@ public class CwWriter implements Writer{
     @Override
     public void write(Crossword cw){
         cw.setId(getUniqueID());
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(cw.getId() + ".cw"))) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(dir + File.separator +cw.getId() + ".cw"))) {
             out.writeObject(cw);
         }
         catch(IOException e){
