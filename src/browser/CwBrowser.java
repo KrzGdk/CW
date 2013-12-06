@@ -51,8 +51,11 @@ public class CwBrowser{
     public void save(Crossword cw){
         writer.write(cw);
     }
-    public void load(long id) throws FileNotFoundException, IOException, ClassNotFoundException{
-        reader.getCw(id);
+    public Crossword load(long id) throws FileNotFoundException, IOException, ClassNotFoundException{
+        return reader.getCw(id);
+    }
+    public Crossword load(String file) throws FileNotFoundException, IOException, ClassNotFoundException{
+        return reader.getCw(file);
     }
     public LinkedList<Crossword> loadAll() throws FileNotFoundException, IOException, ClassNotFoundException{
         return reader.getAllCws();

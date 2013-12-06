@@ -64,4 +64,10 @@ public class CwReader{
         Crossword cw = (Crossword) in.readObject();
         return cw;
     }
+    public Crossword getCw(String file) throws FileNotFoundException, IOException, ClassNotFoundException{
+        File f = new File(file);
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream(f));
+        Crossword cw = (Crossword) in.readObject();
+        return cw;
+    }
 }

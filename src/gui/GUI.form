@@ -2,7 +2,38 @@
 
 <Form version="1.5" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
-    <Component class="javax.swing.JFileChooser" name="fileChooser">
+    <Component class="javax.swing.JFileChooser" name="dbFileChooser">
+      <Properties>
+        <Property name="dialogTitle" type="java.lang.String" value="Wczytyanie bazy hase&#x142;..."/>
+        <Property name="fileFilter" type="javax.swing.filechooser.FileFilter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="new FileNameExtensionFilter(&quot;Pliki tekstowe (*.txt)&quot;, &quot;txt&quot;)" type="code"/>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="dbFileChooser.setAcceptAllFileFilterUsed(false);"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JFileChooser" name="cwLoadFile">
+      <Properties>
+        <Property name="dialogTitle" type="java.lang.String" value="Wczytaj krzy&#x17c;&#xf3;wk&#x119;..."/>
+        <Property name="fileFilter" type="javax.swing.filechooser.FileFilter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="new FileNameExtensionFilter(&quot;Pliki krzy&#x17c;&#xf3;wki (*.cw)&quot;, &quot;cw&quot;)" type="code"/>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cwLoadFile.setAcceptAllFileFilterUsed(false);"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JFileChooser" name="cwSaveFile">
+      <Properties>
+        <Property name="dialogType" type="int" value="1"/>
+        <Property name="approveButtonText" type="java.lang.String" value="Zapisz"/>
+        <Property name="dialogTitle" type="java.lang.String" value="Wska&#x17c; folder do zapisania krzy&#x17c;&#xf3;wki..."/>
+        <Property name="fileSelectionMode" type="int" value="1"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cwSaveFileActionPerformed"/>
+      </Events>
     </Component>
   </NonVisualComponents>
   <Properties>
@@ -59,7 +90,7 @@
                       <Component id="jPanel2" min="-2" pref="76" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="226" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="198" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -257,21 +288,33 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Zapisz"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveButtonActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="loadButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Wczytaj"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="loadButtonActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="printButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Drukuj"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="printButtonActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="solveButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Rozwi&#x105;&#x17c;"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="solveButtonActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

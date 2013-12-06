@@ -5,13 +5,25 @@
 package gui;
 
 import browser.CwBrowser;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfTemplate;
+import com.itextpdf.text.pdf.PdfWriter;
 import cw.Crossword;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -36,7 +48,9 @@ public class GUI extends javax.swing.JFrame{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        fileChooser = new javax.swing.JFileChooser();
+        dbFileChooser = new javax.swing.JFileChooser();
+        cwLoadFile = new javax.swing.JFileChooser();
+        cwSaveFile = new javax.swing.JFileChooser();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         heightSpinner = new javax.swing.JSpinner();
@@ -58,6 +72,24 @@ public class GUI extends javax.swing.JFrame{
                 drawCrossword(g);
             }
         };
+
+        dbFileChooser.setDialogTitle("Wczytyanie bazy haseł...");
+        dbFileChooser.setFileFilter(new FileNameExtensionFilter("Pliki tekstowe (*.txt)", "txt"));
+        dbFileChooser.setAcceptAllFileFilterUsed(false);
+
+        cwLoadFile.setDialogTitle("Wczytaj krzyżówkę...");
+        cwLoadFile.setFileFilter(new FileNameExtensionFilter("Pliki krzyżówki (*.cw)", "cw"));
+        cwLoadFile.setAcceptAllFileFilterUsed(false);
+
+        cwSaveFile.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+        cwSaveFile.setApproveButtonText("Zapisz");
+        cwSaveFile.setDialogTitle("Wskaż folder do zapisania krzyżówki...");
+        cwSaveFile.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+        cwSaveFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cwSaveFileActionPerformed(evt);
+            }
+        });
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Generator krzyżówek");
@@ -145,12 +177,32 @@ public class GUI extends javax.swing.JFrame{
         });
 
         saveButton.setText("Zapisz");
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveButtonActionPerformed(evt);
+            }
+        });
 
         loadButton.setText("Wczytaj");
+        loadButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadButtonActionPerformed(evt);
+            }
+        });
 
         printButton.setText("Drukuj");
+        printButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printButtonActionPerformed(evt);
+            }
+        });
 
         solveButton.setText("Rozwiąż");
+        solveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                solveButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -229,7 +281,7 @@ public class GUI extends javax.swing.JFrame{
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 226, Short.MAX_VALUE)))
+                        .addGap(0, 198, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -239,22 +291,119 @@ public class GUI extends javax.swing.JFrame{
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
         int height = (int) heightSpinner.getValue();
         int width = (int) widthSpinner.getValue();
-        
-        currentCrossword = browser.generate(height, width, dbPathField.getText());
-        currentCrossword.getBoardCopy().printBoard();
-        mainPanel.repaint();
+        if(dbPathField.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Wskaż plik bazy haseł", "Generuj krzyżówkę", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else{
+            currentCrossword = browser.generate(height, width, dbPathField.getText());
+            currentCrossword.getBoardCopy().printBoard();
+            solve = false;
+            mainPanel.repaint();
+        }
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void dbLookupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dbLookupButtonActionPerformed
-        int returnVal = fileChooser.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-             dbPathField.setText(file.toString());
-           
+        int returnVal = dbFileChooser.showOpenDialog(this);
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = dbFileChooser.getSelectedFile();
+            if(!file.exists()){
+                JOptionPane.showMessageDialog(null, "Plik nie istnieje", "Błąd pliku", JOptionPane.ERROR_MESSAGE);
+            }
+            else if(!file.toString().endsWith(".txt")){
+                JOptionPane.showMessageDialog(null, "Plik ze słownikiem powinien mieć rozszerzenie txt", "Błąd formatu pliku", JOptionPane.ERROR_MESSAGE);
+            }
+            else{
+                dbPathField.setText(file.toString());
+            }
         } else {
-            System.out.println("File access cancelled by user.");
+            System.out.println("Loading database cancelled by user.");
         }
     }//GEN-LAST:event_dbLookupButtonActionPerformed
+
+    private void cwSaveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cwSaveFileActionPerformed
+       
+    }//GEN-LAST:event_cwSaveFileActionPerformed
+
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+        if(currentCrossword != null){
+            int returnVal = cwSaveFile.showOpenDialog(this);
+            if(returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = cwSaveFile.getSelectedFile();
+                browser.setDir(file.toString());
+                browser.save(currentCrossword);
+            } else {
+                System.out.println("Saving crossword cancelled by user.");
+            }
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Najpierw wygeneruj krzyżówkę", "Zapisz krzyżówkę", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_saveButtonActionPerformed
+
+    private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
+        int returnVal = cwLoadFile.showOpenDialog(this);
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = cwLoadFile.getSelectedFile();
+            if(!file.exists()){
+                JOptionPane.showMessageDialog(null, "Plik nie istnieje", "Błąd pliku", JOptionPane.ERROR_MESSAGE);
+            }
+            else if(!file.toString().endsWith(".cw")){
+                JOptionPane.showMessageDialog(null, "Plik krzyżówki powinien mieć rozszerzenie cw", "Błąd formatu pliku", JOptionPane.ERROR_MESSAGE);
+            }
+            else{
+                try {
+                    currentCrossword = browser.load(file.toString());
+                    solve = false;
+                    mainPanel.repaint();
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException | ClassNotFoundException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } else {
+            System.out.println("Loading crossword cancelled by user.");
+        }
+    }//GEN-LAST:event_loadButtonActionPerformed
+
+    private void solveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_solveButtonActionPerformed
+        solve = true;
+        mainPanel.repaint();
+    }//GEN-LAST:event_solveButtonActionPerformed
+
+    private void printButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printButtonActionPerformed
+        Document document = new Document();
+        try {
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\temp\\test.pdf"));
+            document.open();
+            PdfContentByte contentByte = writer.getDirectContent();
+            PdfTemplate template = contentByte.createTemplate(900, 500);
+            Graphics2D g2 = template.createGraphics(900, 500);
+            mainPanel.print(g2);
+            g2.dispose();
+            contentByte.addTemplate(template, 900, 300);
+        } catch (FileNotFoundException | DocumentException e) {
+            e.printStackTrace(System.out);
+        }
+        finally{
+            if(document.isOpen()){
+                document.close();
+            }
+        }
+    }//GEN-LAST:event_printButtonActionPerformed
+    private void drawCrosswordToPdf(Graphics g){
+        javax.swing.JPanel PDFpanel  = new javax.swing.JPanel();
+        javax.swing.JLabel PDFlabel  = new javax.swing.JLabel("i am a label");
+        PDFpanel.add(PDFlabel);
+        PDFpanel.setSize(100,100);
+        
+        PDFpanel.setBackground(Color.red);
+
+        javax.swing.JFrame f = new javax.swing.JFrame();
+        f.add(PDFpanel);
+        f.setVisible(true);
+        f.setSize(100,100);
+    }
     private void drawCrossword(Graphics g){
         if(currentCrossword != null){
             g.setColor(Color.BLACK);
@@ -268,6 +417,7 @@ public class GUI extends javax.swing.JFrame{
                             else g.drawString((i+1) + ".", marginLeft-18+delta*cellSize, marginTop+22+i*cellSize);
                         }
                         g.drawRect(marginLeft+j*cellSize, marginTop+i*cellSize, cellSize, cellSize);
+                        if(solve) g.drawString(currentCrossword.getBoardCopy().getCell(i, j).getContent(), marginLeft+14+j*cellSize, marginTop+23+i*cellSize);
                         first = false;
                     }
                     delta++;
@@ -323,14 +473,18 @@ public class GUI extends javax.swing.JFrame{
             }
         });
     }
-    private Crossword currentCrossword;
+    
+    private boolean solve = false;
+    private Crossword currentCrossword = null;
     private CwBrowser browser;
     private final int cellSize = 35;
     private final int marginLeft = 20, marginTop = 10;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JFileChooser cwLoadFile;
+    private javax.swing.JFileChooser cwSaveFile;
+    private javax.swing.JFileChooser dbFileChooser;
     private javax.swing.JButton dbLookupButton;
     private javax.swing.JTextField dbPathField;
-    private javax.swing.JFileChooser fileChooser;
     private javax.swing.JButton generateButton;
     private javax.swing.JSpinner heightSpinner;
     private javax.swing.JLabel jLabel1;
