@@ -1,19 +1,18 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package board;
 
 import java.io.Serializable;
 import java.util.LinkedList;
 
 /**
+ * Board is a class representing crossword's board
  *
- * @author Krzysiek
+ * @author Krzysztof Gądek
  */
 public class Board implements Serializable{
     private BoardCell[][] board;
     private int width, height;
+    
+    
     public Board(int height, int width){
         this.width = width;
         this.height = height;

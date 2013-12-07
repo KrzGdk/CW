@@ -20,9 +20,11 @@ public class Crossword implements Serializable{
     /**
      * Constructs the crossword with empty board
      * 
+     * @see Board
+     * @see InteliCwDB
      * @param height height of the board
      * @param width  width of the board
-     * @param db     database to pick entries from
+     * @param db     path to database to pick entries from
      */
     public Crossword(int height, int width, String db){
         entries = new LinkedList<>();
@@ -42,7 +44,7 @@ public class Crossword implements Serializable{
     /**
      * Checks if there are any entries in crossword
      * 
-     * @return true if there are no entries, false otherwise
+     * @return <code>true</code> if there are no entries, <code>false</code> otherwise
      */
     public boolean isEmpty(){
         if(entries.size() == 0) return true;
@@ -52,7 +54,7 @@ public class Crossword implements Serializable{
     /**
      * Checks if the crossword is fulfilled
      *
-     * @return true if all needed entries have been found, false otherwise
+     * @return <code>true</code> if all needed entries have been found, <code>false</code> otherwise
      */
     public boolean isFull(){
         if(entries.size() == entries.element().getWord().length()+1) return true;
@@ -110,7 +112,7 @@ public class Crossword implements Serializable{
      * Checks if current entries list contains given word
      *
      * @param word word to find in the list of entries
-     * @return true if the list contains the word, false otherwise
+     * @return <code>true</code> if the list contains the word, <code>false</code> otherwise
      */
     public boolean contains(String word){
         for(CwEntry i : entries){
