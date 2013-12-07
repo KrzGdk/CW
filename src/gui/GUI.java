@@ -56,6 +56,7 @@ public class GUI extends javax.swing.JFrame{
         dbFileChooser = new javax.swing.JFileChooser();
         cwLoadFile = new javax.swing.JFileChooser();
         cwSaveFile = new javax.swing.JFileChooser();
+        cwSaveToPdf = new javax.swing.JFileChooser();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         heightSpinner = new javax.swing.JSpinner();
@@ -90,16 +91,15 @@ public class GUI extends javax.swing.JFrame{
         cwSaveFile.setApproveButtonText("Zapisz");
         cwSaveFile.setDialogTitle("Wskaż folder do zapisania krzyżówki...");
         cwSaveFile.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
-        cwSaveFile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cwSaveFileActionPerformed(evt);
-            }
-        });
+
+        cwSaveToPdf.setDialogType(javax.swing.JFileChooser.CUSTOM_DIALOG);
+        cwSaveToPdf.setApproveButtonText("OK");
+        cwSaveToPdf.setDialogTitle("Wybierz folder eksportu do PDF");
+        cwSaveToPdf.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Generator krzyżówek");
         setMinimumSize(new java.awt.Dimension(300, 400));
-        setPreferredSize(new java.awt.Dimension(1100, 510));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Wymiary"));
         jPanel1.setName(""); // NOI18N
@@ -325,10 +325,6 @@ public class GUI extends javax.swing.JFrame{
         }
     }//GEN-LAST:event_dbLookupButtonActionPerformed
 
-    private void cwSaveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cwSaveFileActionPerformed
-       
-    }//GEN-LAST:event_cwSaveFileActionPerformed
-
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         if(currentCrossword != null){
             int returnVal = cwSaveFile.showOpenDialog(this);
@@ -372,33 +368,58 @@ public class GUI extends javax.swing.JFrame{
     }//GEN-LAST:event_loadButtonActionPerformed
 
     private void solveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_solveButtonActionPerformed
-        solve = true;
-        mainPanel.repaint();
+        if(currentCrossword != null){
+            solve = true;
+            mainPanel.repaint();
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Brak krzyżówki do rozwiązania", "Rozwiąż krzyżówkę", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_solveButtonActionPerformed
 
     private void printButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printButtonActionPerformed
-        drawCrosswordToPdf();
+        if(currentCrossword != null){
+            if(currentCrossword.getId() != 0){
+                int returnVal = cwSaveFile.showOpenDialog(this);
+                if(returnVal == JFileChooser.APPROVE_OPTION) {
+                    File file = cwSaveFile.getSelectedFile();
+                    drawCrosswordToPdf(file.getPath() + File.separator + currentCrossword.getId());
+                } else {
+                    System.out.println("Exporting crossword cancelled by user.");
+                }
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Musisz zapisać krzyżówkę przed eksportowaniem", "Eksportuj krzyżówkę", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Najpierw wygeneruj krzyżówkę", "Eksportuj krzyżówkę", JOptionPane.ERROR_MESSAGE);
+        }
         
     }//GEN-LAST:event_printButtonActionPerformed
-    private void drawCrosswordToPdf(){        
+    private void drawCrosswordToPdf(String filename){        
         Document document = new Document();
         float PDFwidth = PageSize.A4.getWidth();
         float PDFheight = PageSize.A4.getHeight();
         
         try {
-            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\temp\\test.pdf"));
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filename + ".pdf"));
+            
+            document.setMargins(10, 0, (float)(currentCrossword.getBoardCopy().getHeight()+1)*cellSize, 0);
             document.open();
+            
             PdfContentByte contentByte = writer.getDirectContent();
             PdfTemplate template = contentByte.createTemplate(PDFwidth, PDFheight);
             Graphics2D g2 = new PdfGraphics2D(template, PDFwidth, PDFheight);
             int PDFmarginLeft = (int) PageSize.A4.getWidth()/2 - currentCrossword.getBoardCopy().getWidth()*cellSize/2;
             drawBoard(g2,PDFmarginLeft,marginTop);
-            drawClues(g2, marginLeft, (currentCrossword.getBoardCopy().getHeight()*+1)*cellSize, 20);
-            
-            BaseFont times = BaseFont.createFont(BaseFont.TIMES_ROMAN,  BaseFont.CP1250,BaseFont.EMBEDDED);
-            Font t9=new Font(times,9);
-            String line="Śćźół:";
-            document.add(new Paragraph(line,t9));
+            for(int i=1;i<currentCrossword.numOfEntries();i++){
+                BaseFont times = BaseFont.createFont(BaseFont.TIMES_ROMAN,BaseFont.CP1250,BaseFont.EMBEDDED);
+                Font font=new Font(times,10);
+                String line=i + ". " + currentCrossword.getEntries().get(i).getClue();
+                Paragraph para = new Paragraph(line,font);
+                document.add(para);
+            }
             g2.dispose();
             contentByte.addTemplate(template, 0, 0);
         } catch (FileNotFoundException | DocumentException e) {
@@ -495,6 +516,7 @@ public class GUI extends javax.swing.JFrame{
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser cwLoadFile;
     private javax.swing.JFileChooser cwSaveFile;
+    private javax.swing.JFileChooser cwSaveToPdf;
     private javax.swing.JFileChooser dbFileChooser;
     private javax.swing.JButton dbLookupButton;
     private javax.swing.JTextField dbPathField;
