@@ -10,7 +10,6 @@ import dictionary.CwEntry;
 import dictionary.Direction;
 import dictionary.Entry;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 /**
  *
@@ -36,11 +35,17 @@ public class CwStrategy extends Strategy{
                     if(it.next().compareTo(horizWord) == 0) end = false;
                     else end = true;
                 }
+                if(horizWord == null) return null;
                 if(end) break;
             }
             String keyCellContent = cw.getBoardCopy().getCell( cw.numOfEntries()-1, (cw.getBoardCopy().getWidth() / 2)).getContent();
-            int delta = (cw.getBoardCopy().getWidth() / 2)-horizWord.getWord().indexOf(keyCellContent, (horizWord.getWord().length() - cw.getBoardCopy().getWidth() / 2)-1);
-                
+            int delta;
+            if(cw.getBoardCopy().getWidth() % 2 == 1){
+                delta = (cw.getBoardCopy().getWidth() / 2)-horizWord.getWord().indexOf(keyCellContent, (horizWord.getWord().length() - cw.getBoardCopy().getWidth() / 2)-1);
+            }
+            else{
+                delta = (cw.getBoardCopy().getWidth() / 2)-horizWord.getWord().indexOf(keyCellContent, (horizWord.getWord().length() - cw.getBoardCopy().getWidth() / 2));
+            }
             return new CwEntry(horizWord, delta, cw.numOfEntries()-1, Direction.HORIZ);
         } else {
             return null;
@@ -57,6 +62,7 @@ public class CwStrategy extends Strategy{
         else{
             for(int i=e.getX(); i<=e.getWord().length()+e.getX()-1; i++){
                 b.setCell(e.getY(), i, new BoardCell(Character.toString(e.getWord().charAt(i-e.getX()))));
+                System.out.println(e.getX() + e.getWord());
             }
         }
     }

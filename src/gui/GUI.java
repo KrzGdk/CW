@@ -5,8 +5,13 @@
 package gui;
 
 import browser.CwBrowser;
+import com.itextpdf.awt.PdfGraphics2D;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -372,17 +377,33 @@ public class GUI extends javax.swing.JFrame{
     }//GEN-LAST:event_solveButtonActionPerformed
 
     private void printButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printButtonActionPerformed
+        drawCrosswordToPdf();
+        
+    }//GEN-LAST:event_printButtonActionPerformed
+    private void drawCrosswordToPdf(){        
         Document document = new Document();
+        float PDFwidth = PageSize.A4.getWidth();
+        float PDFheight = PageSize.A4.getHeight();
+        
         try {
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\temp\\test.pdf"));
             document.open();
             PdfContentByte contentByte = writer.getDirectContent();
-            PdfTemplate template = contentByte.createTemplate(900, 500);
-            Graphics2D g2 = template.createGraphics(900, 500);
-            mainPanel.print(g2);
+            PdfTemplate template = contentByte.createTemplate(PDFwidth, PDFheight);
+            Graphics2D g2 = new PdfGraphics2D(template, PDFwidth, PDFheight);
+            int PDFmarginLeft = (int) PageSize.A4.getWidth()/2 - currentCrossword.getBoardCopy().getWidth()*cellSize/2;
+            drawBoard(g2,PDFmarginLeft,marginTop);
+            drawClues(g2, marginLeft, (currentCrossword.getBoardCopy().getHeight()*+1)*cellSize, 20);
+            
+            BaseFont times = BaseFont.createFont(BaseFont.TIMES_ROMAN,  BaseFont.CP1250,BaseFont.EMBEDDED);
+            Font t9=new Font(times,9);
+            String line="Śćźół:";
+            document.add(new Paragraph(line,t9));
             g2.dispose();
-            contentByte.addTemplate(template, 900, 300);
+            contentByte.addTemplate(template, 0, 0);
         } catch (FileNotFoundException | DocumentException e) {
+            e.printStackTrace(System.out);
+        } catch (IOException e) {
             e.printStackTrace(System.out);
         }
         finally{
@@ -390,49 +411,41 @@ public class GUI extends javax.swing.JFrame{
                 document.close();
             }
         }
-    }//GEN-LAST:event_printButtonActionPerformed
-    private void drawCrosswordToPdf(Graphics g){
-        javax.swing.JPanel PDFpanel  = new javax.swing.JPanel();
-        javax.swing.JLabel PDFlabel  = new javax.swing.JLabel("i am a label");
-        PDFpanel.add(PDFlabel);
-        PDFpanel.setSize(100,100);
-        
-        PDFpanel.setBackground(Color.red);
-
-        javax.swing.JFrame f = new javax.swing.JFrame();
-        f.add(PDFpanel);
-        f.setVisible(true);
-        f.setSize(100,100);
     }
     private void drawCrossword(Graphics g){
         if(currentCrossword != null){
-            g.setColor(Color.BLACK);
-            for(int i=0;i<currentCrossword.getBoardCopy().getHeight();i++){
-                int delta = 0;
-                boolean first = true;
-                for(int j=0;j<currentCrossword.getBoardCopy().getWidth();j++){
-                    if(currentCrossword.getBoardCopy().getCell(i, j) != null){
-                        if(first){ 
-                            if(i<9) g.drawString((i+1) + ".", marginLeft-10+delta*cellSize, marginTop+22+i*cellSize);
-                            else g.drawString((i+1) + ".", marginLeft-18+delta*cellSize, marginTop+22+i*cellSize);
-                        }
-                        g.drawRect(marginLeft+j*cellSize, marginTop+i*cellSize, cellSize, cellSize);
-                        if(solve) g.drawString(currentCrossword.getBoardCopy().getCell(i, j).getContent(), marginLeft+14+j*cellSize, marginTop+23+i*cellSize);
-                        first = false;
+            drawBoard(g, marginLeft, marginTop);
+            drawClues(g, marginLeft+10+currentCrossword.getBoardCopy().getWidth()*cellSize, marginTop-10, cellSize);
+        }
+    }
+    private void drawBoard(Graphics g, int marginL, int marginT){
+        g.setColor(Color.BLACK);
+        for(int i=0;i<currentCrossword.getBoardCopy().getHeight();i++){
+            int delta = 0;
+            boolean first = true;
+            for(int j=0;j<currentCrossword.getBoardCopy().getWidth();j++){
+                if(currentCrossword.getBoardCopy().getCell(i, j) != null){
+                    if(first){ 
+                        if(i<9) g.drawString((i+1) + ".", marginL-10+delta*cellSize, marginT+22+i*cellSize);
+                        else g.drawString((i+1) + ".", marginL-18+delta*cellSize, marginT+22+i*cellSize);
                     }
-                    delta++;
+                    g.drawRect(marginL+j*cellSize, marginT+i*cellSize, cellSize, cellSize);
+                    if(solve) g.drawString(currentCrossword.getBoardCopy().getCell(i, j).getContent(), marginL+14+j*cellSize, marginT+23+i*cellSize);
+                    first = false;
                 }
+                delta++;
             }
-            g.setColor(Color.RED);
-            int sol = currentCrossword.getBoardCopy().getWidth() / 2;
-            for(int j=0;j<currentCrossword.getBoardCopy().getHeight();j++){
-                g.drawRect(marginLeft+sol*cellSize, marginTop+j*cellSize, cellSize, cellSize);
-            }
-        
-            g.setColor(Color.BLACK);
-            for(int i=1;i<currentCrossword.numOfEntries();i++){
-                g.drawString((i) + "." + currentCrossword.getEntries().get(i).getClue(), marginLeft+10+currentCrossword.getBoardCopy().getWidth()*cellSize, marginTop-10+i*cellSize);
-            }
+        }
+        g.setColor(Color.RED);
+        int sol = currentCrossword.getBoardCopy().getWidth() / 2;
+        for(int j=0;j<currentCrossword.getBoardCopy().getHeight();j++){
+            g.drawRect(marginL+sol*cellSize, marginT+j*cellSize, cellSize, cellSize);
+        }
+    }
+    private void drawClues(Graphics g, int marginL, int marginT, int space){
+        g.setColor(Color.BLACK);
+        for(int i=1;i<currentCrossword.numOfEntries();i++){
+            g.drawString((i) + "." + currentCrossword.getEntries().get(i).getClue(), marginL, marginT+i*space);
         }
     }
     
