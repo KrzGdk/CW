@@ -217,17 +217,18 @@ public class GUI extends javax.swing.JFrame{
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(generateButton))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(saveButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(loadButton))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(printButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(solveButton)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(saveButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(loadButton))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(printButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(solveButton)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(generateButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -412,6 +413,7 @@ public class GUI extends javax.swing.JFrame{
             PdfTemplate template = contentByte.createTemplate(PDFwidth, PDFheight);
             Graphics2D g2 = new PdfGraphics2D(template, PDFwidth, PDFheight);
             int PDFmarginLeft = (int) PageSize.A4.getWidth()/2 - currentCrossword.getBoardCopy().getWidth()*cellSize/2;
+            solve = false;
             drawBoard(g2,PDFmarginLeft,marginTop);
             for(int i=1;i<currentCrossword.numOfEntries();i++){
                 BaseFont times = BaseFont.createFont(BaseFont.TIMES_ROMAN,BaseFont.CP1250,BaseFont.EMBEDDED);

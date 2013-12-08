@@ -13,11 +13,21 @@ public class Board implements Serializable{
     private int width, height;
     
     
+    /**
+     * Constructor setting the width and height of the board.
+     *
+     * @param height
+     * @param width
+     */
     public Board(int height, int width){
         this.width = width;
         this.height = height;
         board = new BoardCell[height][width];
     }
+    /**
+     * Prints the whole board to standard input (useful when debugging)
+     *
+     */
     public void printBoard(){
         for(int i = 0; i<height; i++){
             for(int j = 0; j<width; j++){
@@ -27,12 +37,12 @@ public class Board implements Serializable{
             System.out.print("\n");
         }
     }
-    public static void main(String[] args){
-        Board b = new Board(5,5);
-        b.setCell(2, 2, new BoardCell("a"));
-        System.out.println(b.getCell(2, 3)); 
-    }
     
+    /**
+     * Makes a copy of the crossword's board
+     *
+     * @return copy of itselfs
+     */
     public Board copyBoard(){
         Board copy = new Board(this.height, this.width);
         for(int i = 0; i<height; i++){
@@ -45,6 +55,8 @@ public class Board implements Serializable{
     }
 
     /**
+     * Gets the width of the board
+     * 
      * @return the width
      */
     public int getWidth(){
@@ -52,19 +64,43 @@ public class Board implements Serializable{
     }
 
     /**
+     * Gets the height of the board
+     * 
      * @return the height
      */
     public int getHeight(){
         return height;
     }
     
+    /**
+     * Gets the cell at given coordinates
+     *
+     * @see BoardCell
+     * @param vert  vertical coordinate
+     * @param horiz horizontal coordinates
+     * @return cell at given coordinates
+     */
     public BoardCell getCell(int vert, int horiz){
         return board[vert][horiz];
     }
+    
+    /**
+     * Sets the cell at given coordinates
+     *
+     * @see BoardCell
+     * @param vert  vertia coordinate
+     * @param horiz horizontal coordinate
+     * @param cell  cell to set
+     */
     public void setCell(int vert, int horiz, BoardCell cell){
         board[vert][horiz] = cell;
     }
     
+    /**
+     * Returns the list of cells where the entry can start
+     *
+     * @return list of entries where words can start
+     */
     public LinkedList<BoardCell> getStartCells(){
         LinkedList<BoardCell> cells = new LinkedList<>();
         for(BoardCell[] b : board){
@@ -75,6 +111,16 @@ public class Board implements Serializable{
         return cells;
     }
     
+    /**
+     * Creates a regular expression which matches the line between
+     * fromx and tox or fromy and toy
+     *
+     * @param fromx x cooridinate to start the pattern
+     * @param fromy y cooridinate to start the pattern
+     * @param tox   x cooridinate to end the pattern
+     * @param toy   y cooridinate to end the pattern
+     * @return
+     */
     public String createPattern(int fromx, int fromy, int tox, int toy){
         String pattern = "";
         if(fromx == tox){
@@ -100,12 +146,11 @@ public class Board implements Serializable{
         return pattern;
     }
     /**
-     *
-     * @param fromx
-     * @param fromy
-     * @param tox
-     * @param toy
-     * @return
+     * Creates a regular expression for a horizontal word that crosses the 
+     * solution 
+     * 
+     * @param row number of row where word should fit
+     * @return regular expression pattern which matches the row
      */
     public String createHorizMixedLengthPattern(int row){
         String pattern = ".{0," + width/2 + "}";
