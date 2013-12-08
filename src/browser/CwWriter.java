@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package browser;
 
 import cw.Crossword;
@@ -13,16 +9,27 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
+ * Class which save the crossword to directory given in constructor,
+ * the name of the crossword is the current time in miliseconds with .cw extension.
  *
- * @author Krzysiek
+ * @author Krzysztof Gądek
  */
 public class CwWriter implements Writer{
     private String dir;
+    
+    
+    /**
+     * Constructor that sets the path to directory where crossword will be written
+     *
+     * @param dir  path to directory where crossword will be written
+     */
     public CwWriter(String dir){
         this.dir = dir;
     }
 
     /**
+     * Gets the current directory
+     * 
      * @return the dir
      */
     public String getDir(){
@@ -30,15 +37,28 @@ public class CwWriter implements Writer{
     }
 
     /**
-     * @param dir the dir to set
+     * Sets the directory
+     * 
+     * @param dir the path to set working directory
      */
     public void setDir(String dir){
         this.dir = dir;
     }
+    
+    /**
+     * Private method that gets the unique ID of the crossword.
+     * ID is represented as current time in miliseconds.
+     */
     private long getUniqueID(){
         Calendar cal = Calendar.getInstance();
         return cal.getTimeInMillis();
     }
+    /**
+     * Writes the crossword to file in the directory <code>dir</code>
+     *
+     * @see Crossword
+     * @param cw crossword to be saved
+     */
     @Override
     public void write(Crossword cw){
         cw.setId(getUniqueID());
