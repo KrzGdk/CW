@@ -22,7 +22,6 @@ import java.awt.Graphics2D;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,13 +30,14 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
+ * Class which provides graphical user interface 
  *
- * @author Krzysiek
+ * @author Krzysztof Gądek
  */
 public class GUI extends javax.swing.JFrame{
 
     /**
-     * Creates new form GUI
+     * Creates new form GUI, sets the browser directory to running directory
      */
     public GUI(){
         browser = new CwBrowser(".");
@@ -293,7 +293,10 @@ public class GUI extends javax.swing.JFrame{
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Action for pressing the button gerating crossword
+     */
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
         int height = (int) heightSpinner.getValue();
         int width = (int) widthSpinner.getValue();
@@ -307,7 +310,9 @@ public class GUI extends javax.swing.JFrame{
             mainPanel.repaint();
         }
     }//GEN-LAST:event_generateButtonActionPerformed
-
+    /**
+     * Action for pressing the button loading the database
+     */
     private void dbLookupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dbLookupButtonActionPerformed
         int returnVal = dbFileChooser.showOpenDialog(this);
         if(returnVal == JFileChooser.APPROVE_OPTION) {
@@ -325,7 +330,9 @@ public class GUI extends javax.swing.JFrame{
             System.out.println("Loading database cancelled by user.");
         }
     }//GEN-LAST:event_dbLookupButtonActionPerformed
-
+    /**
+     * Action for pressing the button saving the crossword
+     */
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         if(currentCrossword != null){
             int returnVal = cwSaveFile.showOpenDialog(this);
@@ -341,7 +348,9 @@ public class GUI extends javax.swing.JFrame{
             JOptionPane.showMessageDialog(null, "Najpierw wygeneruj krzyżówkę", "Zapisz krzyżówkę", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_saveButtonActionPerformed
-
+    /**
+     * Action for pressing the button loading the crossword
+     */
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
         int returnVal = cwLoadFile.showOpenDialog(this);
         if(returnVal == JFileChooser.APPROVE_OPTION) {
@@ -367,7 +376,9 @@ public class GUI extends javax.swing.JFrame{
             System.out.println("Loading crossword cancelled by user.");
         }
     }//GEN-LAST:event_loadButtonActionPerformed
-
+    /**
+     * Action for pressing the button that solves the crossword
+     */
     private void solveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_solveButtonActionPerformed
         if(currentCrossword != null){
             solve = true;
@@ -377,7 +388,9 @@ public class GUI extends javax.swing.JFrame{
             JOptionPane.showMessageDialog(null, "Brak krzyżówki do rozwiązania", "Rozwiąż krzyżówkę", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_solveButtonActionPerformed
-
+    /**
+     * Action for pressing the button that exports the crossword to PDF file
+     */
     private void printButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printButtonActionPerformed
         if(currentCrossword != null){
             if(currentCrossword.getId() != 0){
@@ -398,6 +411,11 @@ public class GUI extends javax.swing.JFrame{
         }
         
     }//GEN-LAST:event_printButtonActionPerformed
+    /**
+     * Method that saves the crossword to pdf file
+     * 
+     * @param filename name of the file to save the crossword
+     */
     private void drawCrosswordToPdf(String filename){        
         Document document = new Document();
         float PDFwidth = PageSize.A4.getWidth();
@@ -435,12 +453,24 @@ public class GUI extends javax.swing.JFrame{
             }
         }
     }
+    /**
+     * Mathod that draws the crossword with clues
+     * 
+     * @param g graphics to print the crossword
+     */
     private void drawCrossword(Graphics g){
         if(currentCrossword != null){
             drawBoard(g, marginLeft, marginTop);
             drawClues(g, marginLeft+10+currentCrossword.getBoardCopy().getWidth()*cellSize, marginTop-10, cellSize);
         }
     }
+    /**
+     * Mathod that draws the crossword's board
+     * 
+     * @param g graphics to print the crossword
+     * @param marginL left margin
+     * @param marginT top marhin
+     */
     private void drawBoard(Graphics g, int marginL, int marginT){
         g.setColor(Color.BLACK);
         for(int i=0;i<currentCrossword.getBoardCopy().getHeight();i++){
@@ -465,6 +495,14 @@ public class GUI extends javax.swing.JFrame{
             g.drawRect(marginL+sol*cellSize, marginT+j*cellSize, cellSize, cellSize);
         }
     }
+    /**
+     * Mathod that draws the clues
+     * 
+     * @param g graphics to print the crossword
+     * @param marginL left margin
+     * @param marginT top marhin
+     * @param space space between lines
+     */
     private void drawClues(Graphics g, int marginL, int marginT, int space){
         g.setColor(Color.BLACK);
         for(int i=1;i<currentCrossword.numOfEntries();i++){
@@ -476,31 +514,6 @@ public class GUI extends javax.swing.JFrame{
      * @param args the command line arguments
      */
     public static void main(String args[]){
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        /*
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        * */
-        //</editor-fold>
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable(){
             @Override

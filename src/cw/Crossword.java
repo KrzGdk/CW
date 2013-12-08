@@ -1,4 +1,5 @@
 package cw;
+
 import board.Board;
 import dictionary.*;
 import java.io.*;
@@ -26,7 +27,7 @@ public class Crossword implements Serializable{
      * @param width  width of the board
      * @param db     path to database to pick entries from
      */
-    public Crossword(int height, int width, String db){
+    public Crossword(int height, int width, String db) throws IOException{
         entries = new LinkedList<>();
         b = new Board(height, width);
         cwdb = new InteliCwDB(db);

@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Class which save the crossword to directory given in constructor,
@@ -21,7 +20,7 @@ public class CwWriter implements Writer{
     /**
      * Constructor that sets the path to directory where crossword will be written
      *
-     * @param dir  path to directory where crossword will be written
+     * @param dir path to directory where crossword will be written
      */
     public CwWriter(String dir){
         this.dir = dir;
@@ -54,7 +53,8 @@ public class CwWriter implements Writer{
         return cal.getTimeInMillis();
     }
     /**
-     * Writes the crossword to file in the directory <code>dir</code>
+     * Writes the crossword to file in the directory <code>dir</code>,
+     * the name of the file is the crossword's unique id with the extension .cw
      *
      * @see Crossword
      * @param cw crossword to be saved

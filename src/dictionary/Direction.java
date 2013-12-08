@@ -1,11 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package dictionary;
 
 /**
+ * Enumerator class representing the direction of the word in the crossword
  *
- * @author Krzysiek
+ * @author Krzysztof Gądek
  */
 public enum Direction {HORIZ, VERT};
